@@ -236,7 +236,10 @@ fn frozen_account_cannot_tip() {
     // wallet would panic inside the SAC transfer regardless of the freeze check.
     token::StellarAssetClient::new(&f.env, &f.usdc).mint(&user, &100);
     f.rewards.set_frozen(&user, &true);
-    assert_eq!(f.rewards.try_tip(&user, &other, &10), Err(Ok(Error::Frozen)));
+    assert_eq!(
+        f.rewards.try_tip(&user, &other, &10),
+        Err(Ok(contract_err(Error::Frozen)))
+    );
     assert_eq!(token::TokenClient::new(&f.env, &f.usdc).balance(&user), 100);
 }
 
